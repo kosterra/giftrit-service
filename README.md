@@ -60,3 +60,17 @@ app.get('/db', function (request, response) {
   });
 });
 ```
+
+Now we can deploy this app again to Heroku:
+
+```
+$ git add -A
+$ git commit -m "Added database Postgres"
+$ git push
+$ git push heroku master
+$ heroku open
+```
+
+This will give an error that there is no database table hello_world in the database.
+You can now connect to the database via PgAdmin and create this table.
+Credentials can be found in Heroku addons settings.
