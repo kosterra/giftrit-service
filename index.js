@@ -1,5 +1,8 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const router = express.Router();
+const pg = require('pg');
+const path = require('path');
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/todo';
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -17,17 +20,27 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-// READ
-var pg = require('pg');
-
-app.get('/db', function (request, response) {
-    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        client.query('SELECT * FROM hello_world', function(err, result) {
+// READ Hello World
+router.get('/api/helloworld', (req, res, next) => {
+    const results = [];
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, (err, client, done) => {
+        // Handle connection errors
+        if(err) {
             done();
-            if (err)
-            { console.error(err); response.send("Error " + err); }
-            else
-            { response.render('pages/db', {results: result.rows} ); }
+            console.log(err);
+            return res.status(500).json({success: false, data: err});
+        }
+        // SQL Query > Select Data
+        const query = client.query('SELECT * FROM items ORDER BY id ASC;');
+        // Stream results back one row at a time
+        query.on('row', (row) => {
+            results.push(row);
+        });
+        // After all data is returned, close connection and return results
+        query.on('end', () => {
+            done();
+            return res.json(results);
         });
     });
 });
