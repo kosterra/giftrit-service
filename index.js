@@ -34,7 +34,7 @@ app.get('/api/helloworld', function (request, response) {
             if (err)
             { console.error(err); response.send("Error " + err); }
             else
-            { return response.json(result.rows); }
+            { return response.json(result); }
         });
     });
 });
