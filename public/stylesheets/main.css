@@ -1,0 +1,9 @@
+.jumbotron {
+  background: #4f4f98fa;
+  color: white;
+  padding-bottom: 80px;
+}
+
+.navbar + .jumbotron {
+  margin-top: -20px;
+}
