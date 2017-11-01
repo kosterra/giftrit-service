@@ -20,7 +20,7 @@ app.listen(app.get('port'), function() {
 });
 
 // READ Hello World
-app.get('/db', function (request, response) {
+app.get('/api/helloworld', function (request, response) {
     pg.connect(connectionString, function(err, client, done) {
         client.query('SELECT * FROM hello_world', function(err, result) {
             done();
