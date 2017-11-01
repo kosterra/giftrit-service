@@ -46,18 +46,19 @@ Type `npm install` to install the new module. Edit the `index.js`
 file to use this module to connect to the database specified in DATABASE_URL environment variable:
 
 ```
+// READ Hello World
 var pg = require('pg');
 
-app.get('/db', function (request, response) {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
-      done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       { response.render('pages/db', {results: result.rows} ); }
+app.get('/api/helloworld', function (request, response) {
+    pg.connect(connectionString, function(err, client, done) {
+        client.query('SELECT * FROM hello_world', function(err, result) {
+            done();
+            if (err)
+            { console.error(err); response.send("Error " + err); }
+            else
+            { return response.json(result.rows); }
+        });
     });
-  });
 });
 ```
 
@@ -71,6 +72,9 @@ $ git push heroku master
 $ heroku open
 ```
 
-This will give an error that there is no database table hello_world in the database.
+When you navigate to relative url /api/helloworld you get an error
+that there is no database table hello_world in the database.
 You can now connect to the database via PgAdmin and create this table.
 Credentials can be found in Heroku addons settings.
+
+After you have created the table and call the URL again, you will get some JSON results.
