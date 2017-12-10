@@ -1,0 +1,766 @@
+---
+swagger: "2.0"
+info:
+  description: "This is the API for Giftr.it Application"
+  version: "1.0.0"
+  title: "Giftr.it API"
+  contact:
+    email: "ralph.koster@students.ffhs.ch"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "giftrit-service.herokuapp.com"
+basePath: "/api/1.0.0"
+tags:
+- name: "users"
+  description: "Operations available to users"
+- name: "gifts"
+  description: "Operations available to gifts"
+- name: "donations"
+  description: "Operations available to donations"
+- name: "karmas"
+  description: "Operations available to karmas"
+schemes:
+- "https"
+paths:
+  /gifts:
+    get:
+      tags:
+      - "gifts"
+      summary: "searches gifts"
+      description: "By passing in the appropriate options, you can search for\navailable\
+        \ gifts in the system\n"
+      operationId: "searchGift"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "searchString"
+        in: "query"
+        description: "pass an optional search string for looking up a gift"
+        required: false
+        type: "string"
+      - name: "skip"
+        in: "query"
+        description: "number of records to skip for pagination"
+        required: false
+        type: "integer"
+        minimum: 0
+        format: "int32"
+      - name: "limit"
+        in: "query"
+        description: "maximum number of records to return"
+        required: false
+        type: "integer"
+        maximum: 50.0
+        minimum: 0
+        format: "int32"
+      responses:
+        200:
+          description: "search results matching criteria"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Gift"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Gifts"
+    post:
+      tags:
+      - "gifts"
+      summary: "adds a gift item"
+      description: "Adds a gift to the system"
+      operationId: "addGift"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "gift"
+        description: "Gift to add"
+        required: false
+        schema:
+          $ref: "#/definitions/Gift"
+      responses:
+        201:
+          description: "gift created"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing gift already exists"
+      x-swagger-router-controller: "Gifts"
+  /gifts/{id}:
+    get:
+      tags:
+      - "gifts"
+      summary: "get a gift by id"
+      description: "By passing in the appropriate options, you get a gift\n"
+      operationId: "getGift"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of gift to return"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "gift matching giftId"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Gifts"
+    put:
+      tags:
+      - "gifts"
+      summary: "Update gift"
+      description: "This can only be done by the logged in user."
+      operationId: "updateGift"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated gift object"
+        required: false
+        schema:
+          $ref: "#/definitions/Gift"
+      responses:
+        400:
+          description: "Invalid gift supplied"
+        404:
+          description: "Gift not found"
+      x-swagger-router-controller: "Gifts"
+    delete:
+      tags:
+      - "gifts"
+      summary: "Delete gift"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteGift"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The giftId that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid gift id supplied"
+        404:
+          description: "Gift not found"
+      x-swagger-router-controller: "Gifts"
+  /gifts/{id}/images":
+    get:
+      tags:
+      - "gifts"
+      summary: "Returns images of a gift"
+      description: ""
+      operationId: "getGiftImages"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of gift to return images"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "ImageDownloadController"
+    post:
+      tags:
+      - "gifts"
+      summary: "uploads an image to a gift"
+      description: ""
+      operationId: "uploadImage"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of gift to upload a file"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "additionalMetadata"
+        in: "formData"
+        description: "Additional data to pass to server"
+        required: false
+        type: "string"
+      - name: "file"
+        in: "formData"
+        description: "file to upload"
+        required: false
+        type: "file"
+      responses:
+        200:
+          description: "successful operation"
+      x-swagger-router-controller: "ImageUploadController"
+  /gifts/{id}/donations:
+    get:
+      tags:
+      - "gifts"
+      summary: "searches donations for a gift"
+      description: "Returns all donations for a gift\n"
+      operationId: "getGiftDonations"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of the gift"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Donation"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Gifts"
+  /donations:
+    post:
+      tags:
+      - "donations"
+      summary: "adds a donation item"
+      description: "Adds a donation to the system"
+      operationId: "addDonation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "donation"
+        description: "Donation to add"
+        required: false
+        schema:
+          $ref: "#/definitions/Donation"
+      responses:
+        201:
+          description: "donation created"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing donation already exists"
+      x-swagger-router-controller: "Donations"
+  /donations/{id}:
+    get:
+      tags:
+      - "donations"
+      summary: "get donation"
+      description: "By passing in the appropriate options, you can search for\navailable\
+        \ gifts in the system\n"
+      operationId: "getDonation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of donation to return"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "donation matching donationId"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Donation"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Donations"
+  /karmas:
+    get:
+      tags:
+      - "karmas"
+      summary: "Get karmas by optional query parameter"
+      description: ""
+      operationId: "getKarmas"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "minamount"
+        in: "query"
+        description: "The minamount that needs to be fetched."
+        required: false
+        type: "number"
+      - name: "gkp"
+        in: "query"
+        description: "The good karma points that needs to be fetched."
+        required: false
+        type: "number"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Karma"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+      x-swagger-router-controller: "Karmas"
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "Get user by user name"
+      description: ""
+      operationId: "getUserByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+      x-swagger-router-controller: "Users"
+    post:
+      tags:
+      - "users"
+      summary: "adds a user item"
+      description: "Adds a user to the system"
+      operationId: "addUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "User to add"
+        required: false
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "user created"
+        400:
+          description: "invalid input, object invalid"
+        409:
+          description: "an existing user already exists"
+      x-swagger-router-controller: "Users"
+  /users/{id}:
+    get:
+      tags:
+      - "users"
+      summary: "get a user by id"
+      description: "By passing in the appropriate options, you get a user\n"
+      operationId: "getUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to return"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "user matching userId"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Users"
+    put:
+      tags:
+      - "users"
+      summary: "Update user"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+      x-swagger-router-controller: "Users"
+    delete:
+      tags:
+      - "users"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid username supplied"
+        404:
+          description: "User not found"
+      x-swagger-router-controller: "Users"
+  /users/{id}/gifts:
+    get:
+      tags:
+      - "users"
+      summary: "get gifts from a user"
+      description: "By passing in the appropriate options, you get a list of gifts\n\
+        made by a user\n"
+      operationId: "getUserGifts"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to return"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "gifts matching userId"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Gift"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Users"
+  /users/{id}/donations:
+    get:
+      tags:
+      - "users"
+      summary: "get donations from a user"
+      description: "By passing in the appropriate options, you get a list of donations\n\
+        made by a user\n"
+      operationId: "getUserDonations"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of user to return"
+        required: true
+        type: "number"
+      responses:
+        200:
+          description: "donations matching userId"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Donation"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Users"
+  /users/login:
+    get:
+      tags:
+      - "users"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "The username for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when toekn expires"
+        400:
+          description: "Invalid username/password supplied"
+      x-swagger-router-controller: "Users"
+  /users/logout:
+    get:
+      tags:
+      - "users"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "Users"
+securityDefinitions:
+  p_auth:
+    type: "oauth2"
+    authorizationUrl: "https://giftrit-service.herokuapp.com/api/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:gifts: "modify gifts in your account"
+      read:gifts: "read your gifts"
+      write:donations: "modify donations in your account"
+      read:donations: "read your donations"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Gift:
+    type: "object"
+    required:
+    - "amount"
+    - "description"
+    - "id"
+    - "name"
+    - "releaseDate"
+    - "userId"
+    properties:
+      id:
+        type: "integer"
+        example: 1234
+      name:
+        type: "string"
+        example: "Smart TV"
+      description:
+        type: "string"
+        example: "Panasonic Smart TV 75\""
+      amount:
+        type: "number"
+        example: 1499.90000000000009094947017729282379150390625
+      releaseDate:
+        type: "string"
+        format: "int32"
+        example: "2016-08-29T09:12:33.001Z"
+      userId:
+        type: "integer"
+        example: 1234
+      donations:
+        $ref: "#/definitions/Donation"
+      user:
+        $ref: "#/definitions/User"
+    example:
+      amount: 1499.90000000000009094947017729282379150390625
+      donations:
+        karma: 180
+        giftId: 1234
+        amount: 25
+        releaseDate: "2016-08-29T09:12:33.001Z"
+        id: 1234
+        userId: 1234
+        user:
+          karma: 180
+          firstname: "Ralph"
+          password: "password"
+          phone: "phone"
+          id: 1234
+          avatar: "2016-08-29T09:12:33.001Z"
+          email: "email"
+          lastname: "Koster"
+          username: "username"
+          status: 0
+      releaseDate: "2016-08-29T09:12:33.001Z"
+      name: "Smart TV"
+      description: "Panasonic Smart TV 75\""
+      id: 1234
+      userId: 1234
+      user:
+        karma: 180
+        firstname: "Ralph"
+        password: "password"
+        phone: "phone"
+        id: 1234
+        avatar: "2016-08-29T09:12:33.001Z"
+        email: "email"
+        lastname: "Koster"
+        username: "username"
+        status: 0
+  Donation:
+    type: "object"
+    required:
+    - "amount"
+    - "giftId"
+    - "id"
+    - "karma"
+    - "releaseDate"
+    - "userId"
+    properties:
+      id:
+        type: "integer"
+        example: 1234
+      amount:
+        type: "number"
+        example: 25
+      karma:
+        type: "number"
+        example: 180
+      releaseDate:
+        type: "string"
+        format: "int32"
+        example: "2016-08-29T09:12:33.001Z"
+      giftId:
+        type: "integer"
+        example: 1234
+      userId:
+        type: "integer"
+        example: 1234
+      user:
+        $ref: "#/definitions/User"
+    example:
+      karma: 180
+      giftId: 1234
+      amount: 25
+      releaseDate: "2016-08-29T09:12:33.001Z"
+      id: 1234
+      userId: 1234
+      user:
+        karma: 180
+        firstname: "Ralph"
+        password: "password"
+        phone: "phone"
+        id: 1234
+        avatar: "2016-08-29T09:12:33.001Z"
+        email: "email"
+        lastname: "Koster"
+        username: "username"
+        status: 0
+  Karma:
+    type: "object"
+    required:
+    - "gkp"
+    - "id"
+    - "minamount"
+    properties:
+      id:
+        type: "integer"
+        example: 1234
+      minamount:
+        type: "number"
+        example: 5
+        maximum: 10000.0
+      gkp:
+        type: "number"
+        example: 150
+    example:
+      id: 1234
+      minamount: 5
+      gkp: 150
+  User:
+    type: "object"
+    required:
+    - "avatar"
+    - "email"
+    - "firstname"
+    - "id"
+    - "karma"
+    - "lastname"
+    - "password"
+    - "phone"
+    - "status"
+    - "username"
+    properties:
+      id:
+        type: "integer"
+        example: 1234
+      firstname:
+        type: "string"
+        example: "Ralph"
+      lastname:
+        type: "string"
+        example: "Koster"
+      phone:
+        type: "string"
+      email:
+        type: "string"
+      username:
+        type: "string"
+      password:
+        type: "string"
+      karma:
+        type: "number"
+        example: 180
+      avatar:
+        type: "string"
+        format: "int32"
+        example: "2016-08-29T09:12:33.001Z"
+      status:
+        type: "integer"
+        format: "int32"
+        description: "User Status"
+    example:
+      karma: 180
+      firstname: "Ralph"
+      password: "password"
+      phone: "phone"
+      id: 1234
+      avatar: "2016-08-29T09:12:33.001Z"
+      email: "email"
+      lastname: "Koster"
+      username: "username"
+      status: 0
+parameters:
+  sessionCookie:
+    name: "Cookie"
+    in: "header"
+    description: "The session cookie"
+    required: true
+    type: "string"

@@ -1,32 +1,22 @@
 {
-  "name": "heroku-service-hello-world",
-  "version": "0.2.6",
-  "description": "A sample Node.js app which provides a Hello World service",
-  "engines": {
-    "node": "6.11.1"
-  },
+  "name": "giftr-it-api",
+  "version": "1.0.0",
+  "description": "This is the API for Giftr.it Application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "node test.js"
-  },
-  "dependencies": {
-    "pg": "6.x",
-    "ejs": "2.5.6",
-    "express": "4.15.2"
-  },
-  "devDependencies": {
-    "request": "^2.81.0",
-    "tape": "^4.7.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ralphkoster/heroku-service-hello-world.git"
+    "prestart": "npm install",
+    "start": "node index.js"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
+    "swagger"
   ],
-  "license": "MIT"
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "express": "^4.16.2",
+    "js-yaml": "^3.3.0",
+    "swagger-express-mw": "^0.7.0",
+    "swagger-tools": "0.10.1"
+  }
 }

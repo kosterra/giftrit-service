@@ -1,40 +1,45 @@
-var express = require('express');
-var app = express();
-var pg = require('pg');
-var connectionString = process.env.DATABASE_URL;
+'use strict';
 
-app.set('port', (process.env.PORT || 5000));
+var fs = require('fs'),
+    path = require('path'),
+    http = require('http');
 
-app.use(express.static(__dirname + '/public'));
+var app = require('connect')();
+var swaggerTools = require('swagger-tools');
+var jsyaml = require('js-yaml');
+var serverPort = 3000;
 
-// Allow Cross Origin
-app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-});
+// swaggerRouter configuration
+var options = {
+  swaggerUi: path.join(__dirname, '/swagger.json'),
+  controllers: path.join(__dirname, './controllers'),
+  useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
+};
 
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+// The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
+var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
+var swaggerDoc = jsyaml.safeLoad(spec);
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
-});
+// Initialize the Swagger middleware
+swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
+  middleware.redirect();
 
-// READ Hello World
-app.get('/api/helloworld', function (request, response) {
-    pg.connect(connectionString, function(err, client, done) {
-        client.query('SELECT * FROM hello_world', function(err, result) {
-            done();
-            if (err)
-            { console.error(err); response.send("Error " + err); }
-            else
-            { return response.json(result); }
-        });
-    });
+  // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+  app.use(middleware.swaggerMetadata());
+
+  // Validate Swagger requests
+  app.use(middleware.swaggerValidator());
+
+  // Route validated requests to appropriate controller
+  app.use(middleware.swaggerRouter(options));
+
+  // Serve the Swagger documents and Swagger UI
+  app.use(middleware.swaggerUi());
+
+  // Start the server
+  http.createServer(app).listen(serverPort, function () {
+    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
+    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+  });
 });

@@ -1,8 +1,0 @@
-{
-  "name": "Giftr.it App for InnT at Fernfachhochschule Schweiz FFHS",
-  "description": "An application with node.js on Heroku",
-  "repository": "https://github.com/ralphkoster/innt-giftrit",
-  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
-  "keywords": ["giftrit", "innt", "heroku"],
-  "image": "heroku/nodejs"
-}
