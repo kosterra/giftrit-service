@@ -73,7 +73,7 @@ window.onload = function() {
   
   // Build a system
   const ui = SwaggerUIBundle({
-    url: "https://giftrit-service.herokuapp.com/swagger.json",
+    url: window.location + "swagger.json",
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
