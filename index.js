@@ -20,7 +20,7 @@ var swaggerDefinition = {
         version: '1.0.1',
         description: 'RESTful API with Swagger for Giftr.it Application',
     },
-    host: 'giftrit-service.herokuapp.com:' + (process.env.PORT || 3000),
+    host: 'localhost:' + (process.env.PORT || 3000),
     basePath: '/',
 };
 
