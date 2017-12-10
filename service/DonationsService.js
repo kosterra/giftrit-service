@@ -26,16 +26,15 @@ exports.addDonation = function(donation) {
  **/
 exports.getDonation = function(id) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = pg.connect(connectionString, function(err, client, done) {
+    pg.connect(connectionString, function(err, client, done) {
         client.query('SELECT * FROM hello_world', function(err, result) {
             done();
             if (err) {
-              console.error(err); response.send("Error " + err);
+              console.error(err);
               resolve();
             }
             else {
-              return resolve.json(result);
+              return resolve(result[Object.keys(result)[0]]);
             }
         });
     });
