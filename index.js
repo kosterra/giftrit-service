@@ -20,7 +20,7 @@ var swaggerDefinition = {
         version: '1.0.1',
         description: 'RESTful API with Swagger for Giftr.it Application',
     },
-    host: 'localhost:3000',
+    host: 'giftrit-service.herokuapp.com',
     basePath: '/',
 };
 
@@ -34,6 +34,13 @@ var options = {
 
 // initialize swagger-jsdoc
 var swaggerSpec = swaggerJSDoc(options);
+
+// Allow Cross Origin
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
