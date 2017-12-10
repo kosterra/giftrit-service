@@ -1,43 +1,92 @@
-'use strict';
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var swaggerJSDoc = require('swagger-jsdoc');
 
-var fs = require('fs'),
-    path = require('path'),
-    http = require('http');
+var gifts = require('./routes/gifts');
+var donations = require('./routes/donations');
+var karmas = require('./routes/karmas');
+var users = require('./routes/users');
 
-var app = require('connect')();
-var swaggerTools = require('swagger-tools');
-var jsyaml = require('js-yaml');
-var serverPort = process.env.PORT || 3000;
+var app = express();
 
-// swaggerRouter configuration
-var options = {
-  swaggerUi: path.join(__dirname, '/swagger.json'),
-  controllers: path.join(__dirname, './controllers'),
-  useStubs: process.env.NODE_ENV === 'development' // Conditionally turn on stubs (mock mode)
+// swagger definition
+var swaggerDefinition = {
+    info: {
+        title: 'Giftr.it Application API',
+        version: '1.0.1',
+        description: 'RESTful API with Swagger for Giftr.it Application',
+    },
+    host: 'localhost:' + (process.env.PORT || 3000),
+    basePath: '/',
 };
 
-// The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
-var swaggerDoc = jsyaml.safeLoad(spec);
+// options for the swagger docs
+var options = {
+    // import swaggerDefinitions
+    swaggerDefinition: swaggerDefinition,
+    // path to the API docs
+    apis: ['./routes/*.js'],
+};
 
-// Initialize the Swagger middleware
-swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+// initialize swagger-jsdoc
+var swaggerSpec = swaggerJSDoc(options);
 
-  // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
-  app.use(middleware.swaggerMetadata());
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-  // Validate Swagger requests
-  app.use(middleware.swaggerValidator());
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-  // Route validated requests to appropriate controller
-  app.use(middleware.swaggerRouter(options));
+app.use('/', gifts);
+app.use('/', donations);
+app.use('/', karmas);
+app.use('/', users);
 
-  // Serve the Swagger documents and Swagger UI
-  app.use(middleware.swaggerUi());
-
-  // Start the server
-  http.createServer(app).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
-  });
+app.get('/swagger.json', function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
 });
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status( err.code || 500 )
+            .json({
+                status: 'error',
+                message: err
+            });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500)
+        .json({
+            status: 'error',
+            message: err.message
+        });
+});
+
+
+module.exports = app;
