@@ -20,7 +20,7 @@ var swaggerDefinition = {
         version: '1.0.1',
         description: 'RESTful API with Swagger for Giftr.it Application',
     },
-    host: 'localhost:' + (process.env.PORT || 3000),
+    host: 'localhost:3000',
     basePath: '/',
 };
 
@@ -38,6 +38,7 @@ var swaggerSpec = swaggerJSDoc(options);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.set('base', '/api-docs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
