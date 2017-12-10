@@ -30,18 +30,15 @@ exports.getDonation = function(id) {
     examples['application/json'] = pg.connect(connectionString, function(err, client, done) {
         client.query('SELECT * FROM hello_world', function(err, result) {
             done();
-            if (err) { console.error(err); response.send("Error " + err); }
+            if (err) {
+              console.error(err); response.send("Error " + err);
+              resolve();
+            }
             else {
-              return response.json(result);
+              return resolve.json(result);
             }
         });
     });
-
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
   });
 }
 
