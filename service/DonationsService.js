@@ -27,45 +27,16 @@ exports.addDonation = function(donation) {
 exports.getDonation = function(id) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = [ {
-  "karma" : 180.0,
-  "giftId" : 1234,
-  "amount" : 25.0,
-  "releaseDate" : "2016-08-29T09:12:33.001Z",
-  "id" : 1234,
-  "userId" : 1234,
-  "user" : {
-    "karma" : 180.0,
-    "firstname" : "Ralph",
-    "password" : "password",
-    "phone" : "phone",
-    "id" : 1234,
-    "avatar" : "2016-08-29T09:12:33.001Z",
-    "email" : "email",
-    "lastname" : "Koster",
-    "username" : "username",
-    "status" : 0
-  }
-}, {
-  "karma" : 180.0,
-  "giftId" : 1234,
-  "amount" : 25.0,
-  "releaseDate" : "2016-08-29T09:12:33.001Z",
-  "id" : 1234,
-  "userId" : 1234,
-  "user" : {
-    "karma" : 180.0,
-    "firstname" : "Ralph",
-    "password" : "password",
-    "phone" : "phone",
-    "id" : 1234,
-    "avatar" : "2016-08-29T09:12:33.001Z",
-    "email" : "email",
-    "lastname" : "Koster",
-    "username" : "username",
-    "status" : 0
-  }
-} ];
+    examples['application/json'] = pg.connect(connectionString, function(err, client, done) {
+        client.query('SELECT * FROM hello_world', function(err, result) {
+            done();
+            if (err) { console.error(err); response.send("Error " + err); }
+            else {
+              return response.json(result);
+            }
+        });
+    });
+
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
