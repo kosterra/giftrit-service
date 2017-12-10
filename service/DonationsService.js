@@ -32,8 +32,8 @@ exports.getDonation = function(id) {
             if (err) {
               console.error(err);
               resolve();
-            }
-            else {
+            } else {
+              console.log(result);
               return resolve(result[Object.keys(result)[0]]);
             }
         });
