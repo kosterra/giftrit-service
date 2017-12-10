@@ -27,18 +27,23 @@ exports.addDonation = function(donation) {
 exports.getDonation = function(id) {
   return new Promise(function(resolve, reject) {
     console.log('before pg connection');
-    pg.connect(connectionString, function(err, client, done) {
-        console.log('before query');
-        client.query('SELECT * FROM hello_world', function(err, result) {
-            done();
-            if (err) {
-              console.error(err);
-              resolve();
-            } else {
-              console.log(result);
-              return resolve(result[Object.keys(result)[0]]);
-            }
-        });
+    return pg.connect(connectionString, function(err, client, done) {
+        if(err) {
+            return console.error('Could not fetch client from pool', err);
+        } else {
+            console.log('before query');
+
+            return client.query('SELECT * FROM hello_world', function(err, result) {
+                done();
+                if (err) {
+                    console.error(err);
+                    resolve();
+                } else {
+                    console.log(result);
+                    return resolve(result[Object.keys(result)[0]]);
+                }
+            });
+        }
     });
   });
 }
