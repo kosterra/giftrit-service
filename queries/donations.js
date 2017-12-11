@@ -24,6 +24,39 @@ function getAllDonations(req, res, next) {
         });
 }
 
+function getSingleDonation(req, res, next) {
+    var donationId = parseInt(req.params.id);
+    db.one('SELECT * FROM donations WHERE id = $1', donationId)
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved ONE donation'
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
+function createDonation(req, res, next) {
+    req.body.age = parseInt(req.body.age);
+    db.none('INSERT INTO donations(amount, created, giftId, userId, karma)' +
+        'values(${amount}, ${created}, ${giftId}, ${userId}, ${karma})',
+        req.body)
+        .then(function () {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Inserted one donation'
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 
 module.exports = {
     getAllDonations: getAllDonations
