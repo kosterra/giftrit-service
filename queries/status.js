@@ -26,5 +26,5 @@ function getAllStatus(req, res, next) {
 
 
 module.exports = {
-    getAllDonations: getAllDonations
+    getAllStatus: getAllStatus
 };
