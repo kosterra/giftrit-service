@@ -9,17 +9,17 @@ var db = require('../queries/donations');
  *   Donation:
  *     properties:
  *       id:
- *         type: long
+ *         type: integer
  *       amount:
- *         type: double
+ *         type: number
  *       created:
- *         type: date
+ *         type: string
  *       giftId:
- *         type: long
+ *         type: integer
  *       userId:
- *         type: long
+ *         type: integer
  *       karma:
- *         type: long
+ *         type: number
  */
 
 /**
