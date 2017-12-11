@@ -42,7 +42,7 @@ function getSingleDonation(req, res, next) {
 
 function createDonation(req, res, next) {
     req.body.amount = parseFloat(req.body.amount);
-    req.body.created = Date.parse(req.body.created);
+    req.body.created = new Date(req.body.created).getTime();
     req.body.giftId = parseInt(req.body.giftId);
     req.body.userId = parseInt(req.body.userId);
     req.body.karma = parseInt(req.body.karma);
