@@ -59,5 +59,7 @@ function createDonation(req, res, next) {
 
 
 module.exports = {
-    getAllDonations: getAllDonations
+    getAllDonations: getAllDonations,
+    getSingleDonation: getSingleDonation,
+    createDonation: createDonation
 };
