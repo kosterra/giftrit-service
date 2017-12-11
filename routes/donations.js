@@ -8,14 +8,18 @@ var db = require('../queries/donations');
  * definitions:
  *   Donation:
  *     properties:
- *       name:
- *         type: string
- *       breed:
- *         type: string
- *       age:
- *         type: integer
- *       sex:
- *         type: string
+ *       id:
+ *         type: long
+ *       amount:
+ *         type: double
+ *       created:
+ *         type: date
+ *       giftId:
+ *         type: long
+ *       userId:
+ *         type: long
+ *       karma:
+ *         type: long
  */
 
 /**

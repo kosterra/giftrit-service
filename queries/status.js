@@ -9,14 +9,14 @@ var pgp = require('pg-promise')(options);
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432';
 var db = pgp(connectionString);
 
-function getAllDonations(req, res, next) {
-    db.any('SELECT * FROM donations')
+function getAllStatus(req, res, next) {
+    db.any('SELECT * FROM status')
         .then(function (data) {
             res.status(200)
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Retrieved ALL donations'
+                    message: 'Retrieved ALL status'
                 });
         })
         .catch(function (err) {

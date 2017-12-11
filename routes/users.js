@@ -8,14 +8,24 @@ var db = require('../queries/users');
  * definitions:
  *   User:
  *     properties:
- *       name:
+ *       id:
+ *         type: long
+ *       firstname:
  *         type: string
- *       breed:
+ *       lastname:
  *         type: string
- *       age:
- *         type: integer
- *       sex:
+ *       phone:
  *         type: string
+ *       email:
+ *         type: string
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ *       statusId:
+ *         type: long
+ *       karma:
+ *         type: long
  */
 
 /**

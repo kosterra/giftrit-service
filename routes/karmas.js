@@ -8,14 +8,12 @@ var db = require('../queries/karmas');
  * definitions:
  *   Karma:
  *     properties:
- *       name:
- *         type: string
- *       breed:
- *         type: string
- *       age:
- *         type: integer
- *       sex:
- *         type: string
+ *       id:
+ *         type: long
+ *       amount:
+ *         type: double
+ *       karmapoints:
+ *         type: long
  */
 
 /**

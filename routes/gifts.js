@@ -8,14 +8,20 @@ var db = require('../queries/gifts');
  * definitions:
  *   Gift:
  *     properties:
- *       name:
+ *       id:
+ *         type: long
+ *       title:
  *         type: string
- *       breed:
+ *       description:
  *         type: string
- *       age:
- *         type: integer
- *       sex:
- *         type: string
+ *       created:
+ *         type: date
+ *       modified:
+ *         type: date
+ *       userId:
+ *         type: long
+ *       karma:
+ *         type: long
  */
 
 /**
