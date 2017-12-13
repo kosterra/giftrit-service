@@ -63,7 +63,7 @@ function createGift(req, res, next) {
 
 function updateGift(req, res, next) {
     db.none('UPDATE gifts SET title=$1, description=$2, amount=$3, modified=$4, karma=$5 where id=$6',
-        [req.body.title, req.body.description, parseInt(req.body.amount),
+        [req.body.title, req.body.description, parseFloat(req.body.amount),
             new Date(req.body.modified), parseInt(req.params.karma), parseInt(req.params.id)])
         .then(function () {
             res.status(200)
