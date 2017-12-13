@@ -19,7 +19,7 @@ var db = require('../queries/status');
  * /api/status:
  *   get:
  *     tags:
- *       - status
+ *       - Status
  *     description: Returns all status
  *     produces:
  *       - application/json

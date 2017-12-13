@@ -21,7 +21,7 @@ var db = require('../queries/karmas');
  * /api/karmas:
  *   get:
  *     tags:
- *       - karmas
+ *       - Karma
  *     description: Returns all karmas
  *     produces:
  *       - application/json

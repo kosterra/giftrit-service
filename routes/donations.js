@@ -27,7 +27,7 @@ var db = require('../queries/donations');
  * /api/donations:
  *   get:
  *     tags:
- *       - donations
+ *       - Donation
  *     description: Returns all donations
  *     produces:
  *       - application/json
@@ -44,7 +44,7 @@ router.get('/api/donations', db.getAllDonations);
  * /api/donations/{id}:
  *   get:
  *     tags:
- *       - donations
+ *       - Donation
  *     description: Returns a single donation
  *     produces:
  *       - application/json
@@ -67,7 +67,7 @@ router.get('/api/donations/:id', db.getSingleDonation);
  * /api/donations:
  *   post:
  *     tags:
- *       - donations
+ *       - Donation
  *     description: Creates a new donation
  *     produces:
  *       - application/json
