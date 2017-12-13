@@ -31,7 +31,7 @@ var auth = {
  *   post:
  *     tags:
  *       - Contact
- *     description: Creates a contact message
+ *     description: Creates and sends a contact message
  *     produces:
  *       - application/json
  *     parameters:
@@ -46,18 +46,18 @@ var auth = {
  *         description: Successfully sent
  */
 router.post('/api/contact', function (req, res) {
-    var email = req.body.email;
+    var from = req.body.from;
     var text = req.body.text;
     var isError = false;
 
-    console.log('\nCONTACT FORM DATA: '+ email + ': ' + text + '\n');
+    console.log('\nCONTACT FORM DATA: '+ from + ': ' + text + '\n');
 
     // create transporter object capable of sending email using the default SMTP transport
     var transporter = nodemailer.createTransport(mg(auth));
 
     // setup e-mail data with unicode symbols
     var mailOptions = {
-        from: email, // sender address
+        from: from, // sender address
         to: 'ralph.koster@students.ffhs.ch', // list of receivers
         subject: 'Contact-Message from Giftrit', // Subject line
         text: text,
