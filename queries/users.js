@@ -58,7 +58,7 @@ function createUser(req, res, next) {
 }
 
 function updateUser(req, res, next) {
-    db.none('UPDATE users SET firstname=$1, lastname=$2, phone=$3, email=$4 WHERE id=$6',
+    db.none('UPDATE users SET firstname=$1, lastname=$2, phone=$3, email=$4 WHERE id=$5',
         [req.body.firstname, req.body.lastname, req.body.phone, req.body.email, req.params.id])
         .then(function () {
             res.status(200)
