@@ -70,7 +70,7 @@ router.get('/api/users/:id', db.getSingleUser);
 
 /**
  * @swagger
- * /api/user:
+ * /api/users:
  *   post:
  *     tags:
  *       - User
