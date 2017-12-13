@@ -11,6 +11,7 @@ var donations = require('./routes/donations');
 var karmas = require('./routes/karmas');
 var users = require('./routes/users');
 var status = require('./routes/status');
+var contactform = require('./routes/contactform');
 
 var app = express();
 
@@ -61,6 +62,7 @@ app.use('/', donations);
 app.use('/', karmas);
 app.use('/', users);
 app.use('/', status);
+app.use('/', contactform);
 
 app.get('/swagger.json', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
