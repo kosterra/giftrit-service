@@ -60,7 +60,7 @@ router.post('/api/contact', function (req, res) {
         from: email, // sender address
         to: 'ralph.koster@students.ffhs.ch', // list of receivers
         subject: 'Contact-Message from Giftrit', // Subject line
-        text: comment,
+        text: text,
         err: isError
 
     };
