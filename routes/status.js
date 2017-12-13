@@ -9,7 +9,7 @@ var db = require('../queries/status');
  *   Status:
  *     properties:
  *       id:
- *         type: long
+ *         type: integer
  *       value:
  *         type: string
  */

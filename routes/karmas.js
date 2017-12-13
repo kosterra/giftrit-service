@@ -9,11 +9,11 @@ var db = require('../queries/karmas');
  *   Karma:
  *     properties:
  *       id:
- *         type: long
+ *         type: integer
  *       amount:
- *         type: double
+ *         type: number
  *       karmapoints:
- *         type: long
+ *         type: integer
  */
 
 /**

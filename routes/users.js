@@ -9,7 +9,7 @@ var db = require('../queries/users');
  *   User:
  *     properties:
  *       id:
- *         type: long
+ *         type: integer
  *       firstname:
  *         type: string
  *       lastname:
@@ -23,9 +23,9 @@ var db = require('../queries/users');
  *       password:
  *         type: string
  *       statusId:
- *         type: long
+ *         type: integer
  *       karma:
- *         type: long
+ *         type: integer
  */
 
 /**

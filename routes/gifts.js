@@ -9,19 +9,21 @@ var db = require('../queries/gifts');
  *   Gift:
  *     properties:
  *       id:
- *         type: long
+ *         type: integer
  *       title:
  *         type: string
  *       description:
  *         type: string
+ *       amount:
+ *         type: number
  *       created:
- *         type: date
+ *         type: string
  *       modified:
- *         type: date
+ *         type: string
  *       userId:
- *         type: long
+ *         type: integer
  *       karma:
- *         type: long
+ *         type: integer
  */
 
 /**
