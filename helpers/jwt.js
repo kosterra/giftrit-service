@@ -11,7 +11,7 @@ function authenticate() { jwt({
     }),
 
     // Validate the audience and the issuer.
-    audience: process.env.AUTH0_AUDIENCE,
+    audience: 'https://innt.eu.auth0.com/userinfo',
     issuer: 'https://innt.eu.auth0.com',
     algorithms: ['RS256']
 })};
