@@ -43,9 +43,9 @@ router.post('/api/contact', function (req, res) {
     console.log('\nCONTACT FORM DATA: '+ from + ': ' + text + '\n');
 
     const msg = {
-        to: 'app80150036@heroku.com',
+        to: 'ralph.koster@students.ffhs.ch',
         from: from,
-        subject: 'Contact-Message from Giftrit',
+        subject: 'Kontaktanfrage Giftrit',
         text: text,
         html: '<span>' + text + '</span>'
     };
