@@ -1,7 +1,7 @@
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 
-const checkJwt = jwt({
+function authenticate() { jwt({
     // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint.
     secret: jwksRsa.expressJwtSecret({
         cache: true,
@@ -14,8 +14,8 @@ const checkJwt = jwt({
     audience: process.env.AUTH0_AUDIENCE,
     issuer: 'https://innt.eu.auth0.com',
     algorithms: ['RS256']
-});
+})};
 
 module.exports = {
-    checkJwt: checkJwt
+    authenticate: authenticate
 };

@@ -85,7 +85,7 @@ function removeGift(req, res, next) {
             res.status(200)
                 .json({
                     status: 'success',
-                    message: `Removed ${result.rowCount} gift`
+                    message: 'Removed ${result.rowCount} gift'
                 });
             /* jshint ignore:end */
         })

@@ -3,7 +3,7 @@ var router = express.Router();
 
 var db = require('../queries/gifts');
 
-const checkJwt = require('../helpers/jwt');
+const authenticate = require('../helpers/jwt');
 
 /**
  * @swagger
@@ -88,7 +88,7 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *       200:
  *         description: Successfully created
  */
-router.post('/api/gifts', checkJwt, db.createGift);
+router.post('/api/gifts', authenticate, db.createGift);
 
 /**
  * @swagger
