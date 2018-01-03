@@ -47,7 +47,7 @@ router.post('/api/contact', function (req, res) {
         from: from,
         subject: 'Contact-Message from Giftrit',
         text: text,
-        html: '<strong>text</strong>'
+        html: '<strong>' + text + '</strong>'
     };
 
     res.status(sgMail.send(msg));
