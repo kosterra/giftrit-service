@@ -3,6 +3,8 @@ var router = express.Router();
 
 var db = require('../queries/donations');
 
+var checkJwt = require('../helpers/jwt');
+
 /**
  * @swagger
  * definitions:
@@ -82,6 +84,6 @@ router.get('/api/donations/:id', db.getSingleDonation);
  *       200:
  *         description: Successfully created
  */
-router.post('/api/donations', db.createDonation);
+router.post('/api/donations', checkJwt, db.createDonation);
 
 module.exports = router;

@@ -3,6 +3,8 @@ var router = express.Router();
 
 var db = require('../queries/users');
 
+const checkJwt = require('../helpers/jwt');
+
 /**
  * @swagger
  * definitions:
@@ -88,7 +90,7 @@ router.get('/api/users/:id', db.getSingleUser);
  *       200:
  *         description: Successfully created
  */
-router.post('/api/users', db.createUser);
+router.post('/api/users', checkJwt, db.createUser);
 
 /**
  * @swagger
@@ -115,7 +117,7 @@ router.post('/api/users', db.createUser);
  *       200:
  *         description: Successfully updated
  */
-router.put('/api/users/:id', db.updateUser);
+router.put('/api/users/:id', checkJwt, db.updateUser);
 
 /**
  * @swagger
@@ -136,7 +138,7 @@ router.put('/api/users/:id', db.updateUser);
  *       200:
  *         description: Successfully deleted
  */
-router.delete('/api/users/:id', db.removeUser);
+router.delete('/api/users/:id', checkJwt, db.removeUser);
 
 
 module.exports = router;

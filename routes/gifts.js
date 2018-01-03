@@ -3,6 +3,8 @@ var router = express.Router();
 
 var db = require('../queries/gifts');
 
+var checkJwt = require('../helpers/jwt');
+
 /**
  * @swagger
  * definitions:
@@ -86,7 +88,7 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *       200:
  *         description: Successfully created
  */
-router.post('/api/gifts', db.createGift);
+router.post('/api/gifts', checkJwt, db.createGift);
 
 /**
  * @swagger
@@ -113,7 +115,7 @@ router.post('/api/gifts', db.createGift);
  *       200:
  *         description: Successfully updated
  */
-router.put('/api/gifts/:id', db.updateGift);
+router.put('/api/gifts/:id', checkJwt, db.updateGift);
 
 /**
  * @swagger
@@ -134,6 +136,6 @@ router.put('/api/gifts/:id', db.updateGift);
  *       200:
  *         description: Successfully deleted
  */
-router.delete('/api/gifts/:id', db.removeGift);
+router.delete('/api/gifts/:id', checkJwt, db.removeGift);
 
 module.exports = router;
