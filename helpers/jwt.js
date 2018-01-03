@@ -13,7 +13,14 @@ function authenticate() { jwt({
     // Validate the audience and the issuer.
     audience: 'https://innt.eu.auth0.com/userinfo',
     issuer: 'https://innt.eu.auth0.com',
-    algorithms: ['RS256']
+    algorithms: ['RS256'],
+    function(req, res) {
+        if (!req.user.admin) {
+            return res.sendStatus(401);
+        } else {
+            res.sendStatus(200);
+        }
+    }
 })};
 
 module.exports = {

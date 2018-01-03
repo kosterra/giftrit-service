@@ -1,15 +1,15 @@
-var promise = require('bluebird');
+const promise = require('bluebird');
 
-var jwt = require('../helpers/jwt');
+const jwt = require('../helpers/jwt');
 
-var options = {
+const options = {
     // Initialization Options
     promiseLib: promise
 };
 
-var pgp = require('pg-promise')(options);
-var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432';
-var db = pgp(connectionString);
+const pgp = require('pg-promise')(options);
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432';
+const db = pgp(connectionString);
 
 function getAllGifts(req, res, next) {
     db.any('SELECT * FROM gifts')
@@ -27,7 +27,7 @@ function getAllGifts(req, res, next) {
 }
 
 function getSingleGift(req, res, next) {
-    var giftId = parseInt(req.params.id);
+    let giftId = parseInt(req.params.id);
     db.one('SELECT * FROM gifts WHERE id = $1', giftId)
         .then(function (data) {
             res.status(200)
@@ -82,9 +82,9 @@ function updateGift(req, res, next) {
 }
 
 function removeGift(req, res, next) {
-    var giftId = parseInt(req.params.id);
+    let giftId = parseInt(req.params.id);
     db.result('DELETE FROM gifts WHERE id = $1', giftId)
-        .then(function (result) {
+        .then(function () {
             /* jshint ignore:start */
             res.status(200)
                 .json({
