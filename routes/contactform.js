@@ -50,7 +50,13 @@ router.post('/api/contact', function (req, res) {
         html: '<strong>' + text + '</strong>'
     };
 
-    res.status(sgMail.send(msg));
+    sgMail.send(msg);
+
+    res.status(200)
+        .json({
+            status: 'success',
+            message: 'Email sent successfully'
+        });
 });
 
 module.exports = router;
