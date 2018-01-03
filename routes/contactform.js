@@ -40,7 +40,7 @@ router.post('/api/contact', function (req, res) {
     var from = req.body.from;
     var text = req.body.text;
 
-    console.log('\nCONTACT FORM DATA: '+ from + ': ' + text + '\n');
+    console.log('\nCONTACT FORM DATA: ' + from + ': ' + text + '\n');
 
     const msg = {
         to: 'ralph.koster@students.ffhs.ch',
