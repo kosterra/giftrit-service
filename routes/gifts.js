@@ -88,7 +88,7 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *       200:
  *         description: Successfully created
  */
-router.post('/api/gifts', db.createGift);
+router.post('/api/gifts', checkJwt, db.createGift);
 
 /**
  * @swagger
