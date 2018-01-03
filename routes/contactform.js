@@ -43,11 +43,11 @@ router.post('/api/contact', function (req, res) {
     console.log('\nCONTACT FORM DATA: '+ from + ': ' + text + '\n');
 
     const msg = {
-        to: 'ralph.koster@students.ffhs.ch',
+        to: 'app80150036@heroku.com',
         from: from,
         subject: 'Contact-Message from Giftrit',
         text: text,
-        html: '<strong>' + text + '</strong>'
+        html: '<span>' + text + '</span>'
     };
 
     sgMail.send(msg);
