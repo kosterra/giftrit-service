@@ -1,7 +1,22 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var db = require('../queries/gifts');
+const db = require('../queries/gifts');
+
+const checkJwt = jwt({
+    // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint.
+    secret: jwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: `https://YOUR_AUTH0_DOMAIN/.well-known/jwks.json`
+    }),
+
+    // Validate the audience and the issuer.
+    audience: process.env.AUTH0_AUDIENCE,
+    issuer: `https://YOUR_AUTH0_DOMAIN/`,
+    algorithms: ['RS256']
+});
 
 /**
  * @swagger
@@ -86,7 +101,7 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *       200:
  *         description: Successfully created
  */
-router.post('/api/gifts', db.createGift);
+router.post('/api/gifts', checkJwt, db.createGift);
 
 /**
  * @swagger
