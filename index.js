@@ -15,8 +15,6 @@ const contactform = require('./routes/contactform');
 
 const app = express();
 
-const checkJwt = require('./helpers/jwt');
-
 // swagger definition
 const swaggerDefinition = {
     info: {
@@ -38,9 +36,6 @@ const options = {
 
 // initialize swagger-jsdoc
 const swaggerSpec = swaggerJSDoc(options);
-
-// initialize db calls
-const gift = require('./queries/gifts');
 
 
 // Allow Cross Origin
@@ -65,29 +60,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', gifts);
-/**
- * @swagger
- * /api/gifts:
- *   post:
- *     tags:
- *       - Gift
- *     description: Creates a new gift
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: gift
- *         description: Gift object
- *         in: body
- *         required: true
- *         schema:
- *           $ref: '#/definitions/Gift'
- *     responses:
- *       200:
- *         description: Successfully created
- */
-app.post('/api/gifts', checkJwt, gift.createGift);
-
+app.use('/', gifts);
 app.use('/', donations);
 app.use('/', karmas);
 app.use('/', users);
