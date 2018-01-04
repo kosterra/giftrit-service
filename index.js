@@ -15,7 +15,7 @@ const contactform = require('./routes/contactform');
 
 const app = express();
 
-const checkJwt = require('helpers/jwt')
+const checkJwt = require('./helpers/jwt');
 
 // swagger definition
 const swaggerDefinition = {
