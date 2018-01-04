@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const jwt = require('../helpers/jwt');
 
 /**
  * @swagger
@@ -36,9 +38,9 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
  *       200:
  *         description: Successfully sent
  */
-router.post('/api/contact', function (req, res) {
-    var from = req.body.from;
-    var text = req.body.text;
+router.post('/api/contact', jwt.checkJwt, function (req, res) {
+    let from = req.body.from;
+    let text = req.body.text;
 
     console.log('\nCONTACT FORM DATA: ' + from + ': ' + text + '\n');
 

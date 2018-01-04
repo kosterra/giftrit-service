@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var db = require('../queries/status');
+const db = require('../queries/status');
 
 /**
  * @swagger

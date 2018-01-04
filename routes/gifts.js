@@ -87,6 +87,7 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *     responses:
  *       200:
  *         description: Successfully created
+ *
  */
 router.post('/api/gifts', jwt.checkJwt, db.createGift);
 
