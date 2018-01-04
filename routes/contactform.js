@@ -38,7 +38,7 @@ const jwt = require('../helpers/jwt');
  *       200:
  *         description: Successfully sent
  */
-router.post('/api/contact', jwt.checkJwt, function (req, res) {
+router.post('/api/contact', jwt.checkJwt, function (req, res, next) {
     let from = req.body.from;
     let text = req.body.text;
 
@@ -52,12 +52,15 @@ router.post('/api/contact', jwt.checkJwt, function (req, res) {
         html: '<span>' + text + '</span>'
     };
 
-    sgMail.send(msg);
-
-    res.status(200)
-        .json({
-            status: 'success',
-            message: 'Email sent successfully'
+    sgMail.send(msg)
+        .then(function () {
+            res.status(200).json({
+                status: 'success',
+                message: 'Email sent successfully'
+            });
+        })
+        .catch(function (err) {
+            return next(err);
         });
 });
 
