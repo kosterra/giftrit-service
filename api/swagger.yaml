@@ -22,6 +22,10 @@ tags:
   description: "Operations available to karmas"
 schemes:
 - "https"
+securityDefinitions:
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
 paths:
   /gifts:
     get:

@@ -114,6 +114,8 @@ router.post('/api/gifts', jwt.checkJwt, db.createGift);
  *     responses:
  *       200:
  *         description: Successfully updated
+ *
+ *
  */
 router.put('/api/gifts/:id', db.updateGift);
 
