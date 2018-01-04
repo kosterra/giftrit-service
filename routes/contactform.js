@@ -34,6 +34,11 @@ const jwt = require('../helpers/jwt');
  *         required: true
  *         schema:
  *           $ref: '#/definitions/Contact'
+ *       - name: auth
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully sent
