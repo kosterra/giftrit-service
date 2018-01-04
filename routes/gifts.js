@@ -9,12 +9,12 @@ const checkJwt = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `https://YOUR_AUTH0_DOMAIN/.well-known/jwks.json`
+        jwksUri: 'https://innt.eu.auth0.com/.well-known/jwks.json'
     }),
 
     // Validate the audience and the issuer.
-    audience: process.env.AUTH0_AUDIENCE,
-    issuer: `https://YOUR_AUTH0_DOMAIN/`,
+    audience: 'https://innt.eu.auth0.com/userinfo',
+    issuer: 'https://innt.eu.auth0.com',
     algorithms: ['RS256']
 });
 
