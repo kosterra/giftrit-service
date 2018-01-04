@@ -1,22 +1,24 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var swaggerJSDoc = require('swagger-jsdoc');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const swaggerJSDoc = require('swagger-jsdoc');
 
-var gifts = require('./routes/gifts');
-var donations = require('./routes/donations');
-var karmas = require('./routes/karmas');
-var users = require('./routes/users');
-var status = require('./routes/status');
-var contactform = require('./routes/contactform');
+const gifts = require('./routes/gifts');
+const donations = require('./routes/donations');
+const karmas = require('./routes/karmas');
+const users = require('./routes/users');
+const status = require('./routes/status');
+const contactform = require('./routes/contactform');
 
-var app = express();
+const app = express();
+
+const checkJwt = require('helpers/jwt')
 
 // swagger definition
-var swaggerDefinition = {
+const swaggerDefinition = {
     info: {
         title: 'Giftr.it Application API',
         version: '1.0.1',
@@ -27,7 +29,7 @@ var swaggerDefinition = {
 };
 
 // options for the swagger docs
-var options = {
+const options = {
     // import swaggerDefinitions
     swaggerDefinition: swaggerDefinition,
     // path to the API docs
@@ -35,7 +37,11 @@ var options = {
 };
 
 // initialize swagger-jsdoc
-var swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options);
+
+// initialize db calls
+const gift = require('queries/gifts');
+
 
 // Allow Cross Origin
 app.all('/*', function(req, res, next) {
@@ -59,7 +65,29 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', gifts);
+//app.use('/', gifts);
+/**
+ * @swagger
+ * /api/gifts:
+ *   post:
+ *     tags:
+ *       - Gift
+ *     description: Creates a new gift
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: gift
+ *         description: Gift object
+ *         in: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/Gift'
+ *     responses:
+ *       200:
+ *         description: Successfully created
+ */
+app.post('/api/gifts', checkJwt, gift.createGift);
+
 app.use('/', donations);
 app.use('/', karmas);
 app.use('/', users);
@@ -73,7 +101,7 @@ app.get('/swagger.json', function(req, res) {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
