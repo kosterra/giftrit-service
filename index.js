@@ -40,7 +40,7 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 // initialize db calls
-const gift = require('queries/gifts');
+const gift = require('./queries/gifts');
 
 
 // Allow Cross Origin
