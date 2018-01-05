@@ -3,6 +3,8 @@ const router = express.Router();
 
 const db = require('../queries/users');
 
+const jwt = require('../helpers/jwt');
+
 /**
  * @swagger
  * definitions:
@@ -84,11 +86,18 @@ router.get('/api/users/:id', db.getSingleUser);
  *         required: true
  *         schema:
  *           $ref: '#/definitions/User'
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully created
+ *       401:
+ *         description: Unauthorized
  */
-router.post('/api/users', db.createUser);
+router.post('/api/users', jwt.checkJwt, db.createUser);
 
 /**
  * @swagger
@@ -111,11 +120,18 @@ router.post('/api/users', db.createUser);
  *         required: true
  *         schema:
  *           $ref: '#/definitions/User'
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully updated
+ *       401:
+ *         description: Unauthorized
  */
-router.put('/api/users/:id', db.updateUser);
+router.put('/api/users/:id', jwt.checkJwt, db.updateUser);
 
 /**
  * @swagger
@@ -132,11 +148,18 @@ router.put('/api/users/:id', db.updateUser);
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully deleted
+ *       401:
+ *         description: Unauthorized
  */
-router.delete('/api/users/:id', db.removeUser);
+router.delete('/api/users/:id', jwt.checkJwt, db.removeUser);
 
 
 module.exports = router;

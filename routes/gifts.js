@@ -84,9 +84,16 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *         required: true
  *         schema:
  *           $ref: '#/definitions/Gift'
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully created
+ *       401:
+ *         description: Unauthorized
  *
  */
 router.post('/api/gifts', jwt.checkJwt, db.createGift);
@@ -112,13 +119,20 @@ router.post('/api/gifts', jwt.checkJwt, db.createGift);
  *         required: true
  *         schema:
  *           $ref: '#/definitions/Gift'
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully updated
+ *       401:
+ *         description: Unauthorized
  *
  *
  */
-router.put('/api/gifts/:id', db.updateGift);
+router.put('/api/gifts/:id', jwt.checkJwt, db.updateGift);
 
 /**
  * @swagger
@@ -135,10 +149,17 @@ router.put('/api/gifts/:id', db.updateGift);
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully deleted
+ *       401:
+ *         description: Unauthorized
  */
-router.delete('/api/gifts/:id', db.removeGift);
+router.delete('/api/gifts/:id', jwt.checkJwt, db.removeGift);
 
 module.exports = router;

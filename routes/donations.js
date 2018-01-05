@@ -3,6 +3,8 @@ const router = express.Router();
 
 const db = require('../queries/donations');
 
+const jwt = require('../helpers/jwt');
+
 /**
  * @swagger
  * definitions:
@@ -78,10 +80,17 @@ router.get('/api/donations/:id', db.getSingleDonation);
  *         required: true
  *         schema:
  *           $ref: '#/definitions/Donation'
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Successfully created
+ *       401:
+ *         description: Unauthorized
  */
-router.post('/api/donations', db.createDonation);
+router.post('/api/donations', jwt.checkJwt, db.createDonation);
 
 module.exports = router;

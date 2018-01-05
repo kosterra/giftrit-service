@@ -12,7 +12,7 @@ const checkJwt = jwt({
     }),
 
     // Validate the audience and the issuer.
-    audience: 'https://innt.eu.auth0.com/userinfo',
+    audience: 'https://innt.eu.auth0.com/api/v2/',
     issuer: 'https://innt.eu.auth0.com',
     algorithms: ['RS256']
 });
