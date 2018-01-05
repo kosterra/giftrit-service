@@ -43,8 +43,6 @@ function getSingleGift(req, res, next) {
 }
 
 function createGift(req, res, next) {
-    jwt.authenticate();
-
     req.body.amount = parseFloat(req.body.amount);
     req.body.created = new Date(req.body.created);
     req.body.modified = new Date(req.body.modified);
