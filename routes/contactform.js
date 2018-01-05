@@ -42,6 +42,8 @@ const jwt = require('../helpers/jwt');
  *     responses:
  *       200:
  *         description: Successfully sent
+ *       401:
+ *         description: Unauthorized
  */
 router.post('/api/contact', jwt.checkJwt, function (req, res, next) {
     let from = req.body.from;
