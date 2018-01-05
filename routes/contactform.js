@@ -5,8 +5,6 @@ const sgMail = require('@sendgrid/mail');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const jwt = require('../helpers/jwt');
-
 /**
  * @swagger
  * definitions:
@@ -45,7 +43,7 @@ const jwt = require('../helpers/jwt');
  *       401:
  *         description: Unauthorized
  */
-router.post('/api/contact', jwt.checkJwt, function (req, res, next) {
+router.post('/api/contact', function (req, res, next) {
     let from = req.body.from;
     let text = req.body.text;
 
