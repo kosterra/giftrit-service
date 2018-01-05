@@ -36,7 +36,7 @@ const jwt = require('../helpers/jwt');
  *           $ref: '#/definitions/Contact'
  *       - name: Authorization
  *         in: header
- *         description: the authorization header
+ *         description: the authorization header (Bearer auth_token)
  *         required: true
  *         type: string
  *     responses:
