@@ -28,14 +28,10 @@ function getAllGifts(req, res, next) {
 
 function getSingleGift(req, res, next) {
     let giftId = parseInt(req.params.id);
-    db.one('SELECT * FROM gifts WHERE id = $1', giftId)
+
+    db.task(loadGift(giftId))
         .then(function (data) {
-            res.status(200)
-                .json({
-                    status: 'success',
-                    data: data,
-                    message: 'Retrieved ONE gift'
-                });
+            this.data = data;
         })
         .catch(function (err) {
             return next(err);
@@ -94,6 +90,16 @@ function removeGift(req, res, next) {
         .catch(function (err) {
             return next(err);
         });
+}
+
+function loadGift(t, giftId) {
+    return t.map('SELECT * FROM gifts WHERE giftId = $1', giftId, gift => {
+        return t.any('SELECT * FROM users WHERE userId = $1', gift.userId)
+            .then(user => {
+                gift.user = user;
+                return gift;
+            });
+        }).then(t.batch);
 }
 
 module.exports = {
