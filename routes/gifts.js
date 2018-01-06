@@ -26,6 +26,8 @@ const jwt = require('../helpers/jwt');
  *         type: integer
  *       karma:
  *         type: integer
+ *       imageUrl:
+ *         type: string
  */
 
 /**

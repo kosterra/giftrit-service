@@ -60,8 +60,8 @@ function createGift(req, res, next) {
     req.body.modified = new Date(req.body.modified);
     req.body.userId = parseInt(req.body.userId);
     req.body.karma = parseInt(req.body.karma);
-    db.none('INSERT INTO gifts(title, description, amount, created, modified, userId, karma)' +
-        'VALUES(${title}, ${description}, ${amount}, ${created}, ${modified}, ${userId}, ${karma})',
+    db.none('INSERT INTO gifts(title, description, amount, created, modified, userId, karma, imageurl)' +
+        'VALUES(${title}, ${description}, ${amount}, ${created}, ${modified}, ${userId}, ${karma}, ${imageUrl})',
         req.body)
         .then(function () {
             res.status(200)
@@ -76,7 +76,7 @@ function createGift(req, res, next) {
 }
 
 function updateGift(req, res, next) {
-    db.none('UPDATE gifts SET title=$1, description=$2, amount=$3, modified=$4, karma=$5 where id=$6',
+    db.none('UPDATE gifts SET title=$1, description=$2, amount=$3, modified=$4, karma=$5, imageUrl=$6 where id=$7',
         [req.body.title, req.body.description, parseFloat(req.body.amount),
             new Date(req.body.modified), parseInt(req.body.karma), parseInt(req.params.id)])
         .then(function () {

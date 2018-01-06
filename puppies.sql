@@ -168,8 +168,7 @@ CREATE TABLE public.users
     phone character varying(75) COLLATE pg_catalog."default" NOT NULL,
     email character varying(75) COLLATE pg_catalog."default" NOT NULL,
     username character varying(75) COLLATE pg_catalog."default" NOT NULL,
-    password character varying(75) COLLATE pg_catalog."default" NOT NULL,
-    "statusId" bigint NOT NULL,
+    statusId bigint NOT NULL,
     karma bigint NOT NULL,
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )

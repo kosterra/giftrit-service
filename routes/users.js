@@ -22,12 +22,12 @@ const jwt = require('../helpers/jwt');
  *         type: string
  *       username:
  *         type: string
- *       password:
- *         type: string
  *       statusId:
  *         type: integer
  *       karma:
  *         type: integer
+ *       description:
+ *         type: string
  */
 
 /**
