@@ -32,9 +32,12 @@ function getSingleGift(req, res, next) {
     db.task(t => {
         return t.oneOrNone('SELECT * FROM gifts WHERE id = $1', giftId)
             .then(gift => {
-                if(gift) {
+                if (gift) {
                     data = gift;
-                    return t.oneOrNone('SELECT id, firstname, lastname, username, email, phone, statusid, karma from users WHERE id = $1', gift.userid);
+                    return t.oneOrNone(
+                        'SELECT id, firstname, lastname, username, email, phone, statusid, karma, description' +
+                        'FROM users' +
+                        'WHERE id = $1', gift.userid);
                 }
                 return []; // gift not found, so no user
             });
