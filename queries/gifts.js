@@ -30,10 +30,13 @@ function getSingleGift(req, res, next) {
     let giftId = parseInt(req.params.id);
 
     db.task(t => {
-        return t.one('SELECT * FROM gifts WHERE id = $1', giftId)
+        return t.oneOrNone('SELECT * FROM gifts WHERE id = $1', giftId)
             .then(gift => {
-                console.log(gift);
-                return t.any('SELECT * FROM user WHERE id = $1', gift.userid);
+                if(gift) {
+                    console.log(gift);
+                    return t.oneOrNone('SELECT * from users WHERE id = $1', gift.userid);
+                }
+                return []; // gift not found, so no user
             });
     })
         .then(user => {
