@@ -29,21 +29,24 @@ function getAllGifts(req, res, next) {
 function getSingleGift(req, res, next) {
     let giftId = parseInt(req.params.id);
 
+    let data = [];
+
     db.task(t => {
         return t.oneOrNone('SELECT * FROM gifts WHERE id = $1', giftId)
             .then(gift => {
                 if(gift) {
-                    console.log(gift);
+                    data = gift;
                     return t.oneOrNone('SELECT * from users WHERE id = $1', gift.userid);
                 }
                 return []; // gift not found, so no user
             });
     })
         .then(user => {
+            data.user = user;
             res.status(200)
                 .json({
                     status: 'success',
-                    data: user,
+                    data: data,
                     message: 'Retrieved ONE gift'
                 });
         })
