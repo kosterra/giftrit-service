@@ -47,7 +47,7 @@ function getSingleGift(req, res, next) {
                 .json({
                     status: 'success',
                     data: data,
-                    message: 'Retrieved ONE gift'
+                    message: 'Retrieved' + data.length + 'gift'
                 });
         })
         .catch(error => {
