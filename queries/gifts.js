@@ -30,7 +30,7 @@ function getSingleGift(req, res, next) {
     let giftId = parseInt(req.params.id);
     db.one('SELECT * FROM gifts WHERE id = $1', giftId)
         .then(function (gift) {
-            db.one('SELECT * FROM users WHERE id = $1', gift.userId)
+            db.one('SELECT * FROM users WHERE id = $1', gift.userid)
                 .then(function (user) {
                     data.user = user;
 
