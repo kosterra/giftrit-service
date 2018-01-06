@@ -35,9 +35,7 @@ function getSingleGift(req, res, next) {
                 if (gift) {
                     data = gift;
                     return t.oneOrNone(
-                        'SELECT id, firstname, lastname, username, email, phone, statusid, karma, description' +
-                        'FROM users' +
-                        'WHERE id = $1', gift.userid);
+                        'SELECT id, firstname, lastname, username, email, phone, statusid, karma, description FROM users WHERE id = $1', gift.userid);
                 }
                 return []; // gift not found, so no user
             });
