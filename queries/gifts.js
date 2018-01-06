@@ -1,7 +1,5 @@
 const promise = require('bluebird');
 
-const jwt = require('../helpers/jwt');
-
 const options = {
     // Initialization Options
     promiseLib: promise

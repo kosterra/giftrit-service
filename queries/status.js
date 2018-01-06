@@ -1,13 +1,13 @@
-var promise = require('bluebird');
+const promise = require('bluebird');
 
-var options = {
+const options = {
     // Initialization Options
     promiseLib: promise
 };
 
-var pgp = require('pg-promise')(options);
-var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432';
-var db = pgp(connectionString);
+const pgp = require('pg-promise')(options);
+const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432';
+const db = pgp(connectionString);
 
 function getAllStatus(req, res, next) {
     db.any('SELECT * FROM status')
