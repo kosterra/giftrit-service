@@ -29,9 +29,14 @@ function getAllGifts(req, res, next) {
 function getSingleGift(req, res, next) {
     let giftId = parseInt(req.params.id);
 
-    db.task(loadGift)
+    db.task(buildTree)
         .then(function (data) {
-            this.data = data;
+            res.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved ONE gift'
+                });
         })
         .catch(function (err) {
             return next(err);
@@ -92,8 +97,8 @@ function removeGift(req, res, next) {
         });
 }
 
-function loadGift(t) {
-    return t.map('SELECT * FROM gifts WHERE giftId = 1', gift => {
+function buildTree(t) {
+    return t.map('SELECT * FROM gifts WHERE giftId = 1', [], gift => {
         return t.any('SELECT * FROM users WHERE userId = $1', gift.userId)
             .then(user => {
                 gift.user = user;
