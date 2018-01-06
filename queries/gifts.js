@@ -29,7 +29,7 @@ function getAllGifts(req, res, next) {
 function getSingleGift(req, res, next) {
     let giftId = parseInt(req.params.id);
 
-    db.task(loadGift(giftId))
+    db.task(loadGift)
         .then(function (data) {
             this.data = data;
         })
@@ -92,8 +92,8 @@ function removeGift(req, res, next) {
         });
 }
 
-function loadGift(t, giftId) {
-    return t.map('SELECT * FROM gifts WHERE giftId = $1', giftId, gift => {
+function loadGift(t) {
+    return t.map('SELECT * FROM gifts WHERE giftId = 1', gift => {
         return t.any('SELECT * FROM users WHERE userId = $1', gift.userId)
             .then(user => {
                 gift.user = user;
