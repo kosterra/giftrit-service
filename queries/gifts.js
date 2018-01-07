@@ -30,7 +30,7 @@ function getSingleGift(req, res, next) {
     let data = [];
 
     db.task(t => {
-        return t.oneOrNone('SELECT * FROM gifts LEFT JOIN (SELECT sum(Donation.amount) AS donatedAmount FROM Donation GROUP BY Donation.giftId) GiftDonation ON GiftDonation.giftId = gifts.id WHERE id = $1', giftId)
+        return t.oneOrNone('SELECT * FROM gifts LEFT JOIN (SELECT sum(Donations.amount) AS donatedAmount FROM Donations GROUP BY Donation.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE id = $1', giftId)
             .then(gift => {
                 if (gift) {
                     data = gift;
