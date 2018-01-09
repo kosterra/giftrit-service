@@ -27,15 +27,13 @@ function getAllUsers(req, res, next) {
 function getSingleUser(req, res, next) {
     var userId = parseInt(req.params.id);
 	
-	/*let data = [];
+	let data = [];
 	
     db.task(t => {
         return t.one('SELECT * FROM users WHERE id = $1', userId)
-            .then(user => {                
-                    data = user;
-                    return t.any(
-						'SELECT * FROM gifts WHERE userId = $1', user.id);				
-				}                
+            .then(user => {
+				data = user;
+				return t.any('SELECT * FROM gifts WHERE userId = $1', user.id);							
             });
 	})
 	.then(gifts => {
@@ -49,11 +47,11 @@ function getSingleUser(req, res, next) {
 	})
 	.catch(error => {
 		return next(error);
-	});*/
+	});
 	
 	
 	
-    db.one('SELECT * FROM users WHERE id = $1', userId)
+    /*db.one('SELECT * FROM users WHERE id = $1', userId)
         .then(function (data) {
             res.status(200)
                 .json({
@@ -64,7 +62,7 @@ function getSingleUser(req, res, next) {
         })
         .catch(function (err) {
             return next(err);
-        });
+        });*/
 }
 
 function createUser(req, res, next) {
