@@ -30,28 +30,27 @@ function getSingleGift(req, res, next) {
     let data = [];
 
     db.task(t => {
-        return t.oneOrNone('SELECT * FROM gifts LEFT JOIN (SELECT sum(Donations.amount) AS donatedAmount, Donations.giftId FROM Donations GROUP BY Donations.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE id = $1', giftId)
+        return t.oneOrNone('SELECT * FROM gifts LEFT JOIN (SELECT sum(coalesce(Donations.amount,0)) AS donatedAmount, Donations.giftId FROM Donations GROUP BY Donations.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE id = $1', giftId)
             .then(gift => {
                 if (gift) {
                     data = gift;
-                    return t.oneOrNone(
-                        'SELECT id, firstname, lastname, username, email, phone, statusid, karma, description FROM users WHERE id = $1', gift.userid);
+                    return t.oneOrNone('SELECT id, firstname, lastname, username, email, phone, statusid, karma, description FROM users WHERE id = $1', gift.userid);
                 }
                 return []; // gift not found, so no user
             });
-    })
-        .then(user => {
-            data.user = user;
-            res.status(200)
-                .json({
-                    status: 'success',
-                    data: data,
-                    message: 'Retrieved ' + data.length + ' gifts'
-                });
-        })
-        .catch(error => {
-            return next(error);
-        });
+	})
+	.then(user => {
+		data.user = user;
+		res.status(200)
+			.json({
+				status: 'success',
+				data: data,
+				message: 'Retrieved ' + data.length + ' gifts'
+			});
+	})
+	.catch(error => {
+		return next(error);
+	});
 }
 
 function createGift(req, res, next) {
