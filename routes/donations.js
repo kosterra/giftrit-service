@@ -93,4 +93,32 @@ router.get('/api/donations/:id', db.getSingleDonation);
  */
 router.post('/api/donations', jwt.checkJwt, db.createDonation);
 
+/**
+ * @swagger
+ * /api/donations/{id}:
+ *   delete:
+ *     tags:
+ *       - Donation
+ *     description: Deletes a single donation
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Donation's id
+ *         in: path
+ *         required: true
+ *         type: integer
+ *       - name: Authorization
+ *         in: header
+ *         description: the authorization header
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successfully deleted
+ *       401:
+ *         description: Unauthorized
+ */
+router.delete('/api/donations/:id', jwt.checkJwt, db.removeDonation);
+
 module.exports = router;
