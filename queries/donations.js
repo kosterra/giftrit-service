@@ -61,9 +61,26 @@ function createDonation(req, res, next) {
         });
 }
 
+function removeDonation(req, res, next) {
+    let donationId = parseInt(req.params.id);
+    db.result('DELETE FROM donations WHERE id = $1', donationId)
+        .then(function () {
+            /* jshint ignore:start */
+            res.status(200)
+                .json({
+                    status: 'success',
+                    message: 'Removed ${result.rowCount} donation'
+                });
+            /* jshint ignore:end */
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
 
 module.exports = {
     getAllDonations: getAllDonations,
     getSingleDonation: getSingleDonation,
-    createDonation: createDonation
+    createDonation: createDonation,
+	removeDonation: removeDonation
 };
