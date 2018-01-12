@@ -34,10 +34,14 @@ function getSingleUser(req, res, next) {
             .then(user => {
 				data = user;
 				return t.any('SELECT * FROM gifts WHERE userId = $1', user.id);							
-            });
+            })
+				.then(gifts => {
+					data.gifts = gifts;
+					return t.any('SELECT * FROM donations WHERE userId = $1', user.id);							
+				});
 	})
-	.then(gifts => {
-		data.gifts = gifts;
+	.then(donations => {
+		data.donations = donations;
 		res.status(200)
 			.json({
 				status: 'success',
