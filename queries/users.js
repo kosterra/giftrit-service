@@ -33,15 +33,15 @@ function getSingleUser(req, res, next) {
         return t.one('SELECT * FROM users WHERE id = $1', userId)
             .then(user => {
 				data = user;
-				return t.any('SELECT * FROM gifts WHERE userId = $1', user.id);							
-            })
-				.then(gifts => {
-					data.gifts = gifts;
-					return t.any('SELECT * FROM donations WHERE userId = $1', user.id);							
-				});
-	})
-	.then(donations => {
-		data.donations = donations;
+				return t.any('SELECT * FROM gifts WHERE userId = $1', user.id)
+					.then(gifts => {
+						data.gifts = gifts;
+						return t.any('SELECT * FROM donations WHERE userId = $1', user.id);							
+					});
+            });
+	})	
+	.then(gifts => {
+		data.gifts = gifts;
 		res.status(200)
 			.json({
 				status: 'success',
