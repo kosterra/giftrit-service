@@ -40,8 +40,8 @@ function getSingleUser(req, res, next) {
 					});
             });
 	})	
-	.then(gifts => {
-		data.gifts = gifts;
+	.then(donations => {
+		data.donations = donations;
 		res.status(200)
 			.json({
 				status: 'success',
