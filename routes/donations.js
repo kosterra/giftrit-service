@@ -62,7 +62,7 @@ router.get('/api/donations', db.getAllDonations);
  *         schema:
  *           $ref: '#/definitions/Donation'
  */
-router.get('/api/donations', db.getGiftDonations);
+router.get('/api/gift/:id/donations', db.getGiftDonations);
 
 /**
  * @swagger
