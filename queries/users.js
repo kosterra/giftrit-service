@@ -33,7 +33,7 @@ function getSingleUser(req, res, next) {
         return t.one('SELECT * FROM users WHERE id = $1', userId)
             .then(user => {
 				data = user;
-				return t.any('SELECT * FROM gifts WHERE userId = $1', user.id)
+				return t.any('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE userid=$1', user.id)
 					.then(gifts => {
 						data.gifts = gifts;
 						return t.any('SELECT * FROM donations WHERE userId = $1', user.id);							
