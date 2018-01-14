@@ -36,7 +36,7 @@ function getSingleGift(req, res, next) {
                 return t.any('SELECT * FROM donations WHERE giftid = $1', gift.id)
                     .then(donations => {
                         data.donations = donations;
-                        return t.oneOrNone('SELECT id, firstname, lastname, username, email, phone, statusid, karma, description FROM users WHERE id = $1', gift.userid);
+                        return t.oneOrNone('SELECT * FROM users WHERE id = $1', gift.userid);
                     });
             })
 	})
