@@ -33,11 +33,28 @@ const jwt = require('../helpers/jwt');
  *     description: Returns all donations
  *     produces:
  *       - application/json
+ *     responses:
+ *       200:
+ *         description: An array of donations
+ *         schema:
+ *           $ref: '#/definitions/Donation'
+ */
+router.get('/api/donations', db.getAllDonations);
+
+/**
+ * @swagger
+ * /api/gift/{id}/donations:
+ *   get:
+ *     tags:
+ *       - Donation
+ *     description: Returns all donations for one gift
+ *     produces:
+ *       - application/json
  *     parameters:
- *       - name: giftId
- *         description: Gift id
- *         in: query
- *         required: false
+ *       - name: id
+ *         description: Gifts's id
+ *         in: path
+ *         required: true
  *         type: integer
  *     responses:
  *       200:
@@ -45,7 +62,7 @@ const jwt = require('../helpers/jwt');
  *         schema:
  *           $ref: '#/definitions/Donation'
  */
-router.get('/api/donations', db.getDonations);
+router.get('/api/donations', db.getGiftDonations);
 
 /**
  * @swagger
