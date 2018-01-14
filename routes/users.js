@@ -28,6 +28,8 @@ const jwt = require('../helpers/jwt');
  *         type: integer
  *       description:
  *         type: string
+ *       imageUrl:
+ *         type: string
  */
 
 /**
