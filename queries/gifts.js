@@ -30,14 +30,15 @@ function getSingleGift(req, res, next) {
     let data = [];
 
     db.task(t => {
-        return t.oneOrNone('SELECT * FROM gifts WHERE id = $1', giftId)
+        return t.oneOrNone('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE id = $1', giftId)
             .then(gift => {
-                if (gift) {
-                    data = gift;
-                    return t.oneOrNone('SELECT id, firstname, lastname, username, email, phone, statusid, karma, description FROM users WHERE id = $1', gift.userid);
-                }
-                return []; // gift not found, so no user
-            });
+                data = gift;
+                return t.any('SELECT * FROM donations WHERE giftid = $1', gift.id)
+                    .then(donations => {
+                        data.donations = donations;
+                        return t.oneOrNone('SELECT id, firstname, lastname, username, email, phone, statusid, karma, description FROM users WHERE id = $1', gift.userid);
+                    });
+            })
 	})
 	.then(user => {
 		data.user = user;
