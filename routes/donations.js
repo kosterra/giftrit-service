@@ -33,13 +33,19 @@ const jwt = require('../helpers/jwt');
  *     description: Returns all donations
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: giftId
+ *         description: Gift id
+ *         in: query
+ *         required: false
+ *         type: integer
  *     responses:
  *       200:
  *         description: An array of donations
  *         schema:
  *           $ref: '#/definitions/Donation'
  */
-router.get('/api/donations', db.getAllDonations);
+router.get('/api/donations', db.getDonations);
 
 /**
  * @swagger

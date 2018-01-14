@@ -9,19 +9,36 @@ const pgp = require('pg-promise')(options);
 const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432';
 const db = pgp(connectionString);
 
-function getAllDonations(req, res, next) {
-    db.any('SELECT * FROM donations')
-        .then(function (data) {
-            res.status(200)
-                .json({
-                    status: 'success',
-                    data: data,
-                    message: 'Retrieved ALL donations'
-                });
-        })
-        .catch(function (err) {
-            return next(err);
-        });
+function getDonations(req, res, next) {
+    const giftId = parseInt(req.params.giftId);
+
+    if (giftId && giftId > 0) {
+        db.query('SELECT * FROM donations WHERE giftid=$1', giftId)
+            .then(function (data) {
+                res.status(200)
+                    .json({
+                        status: 'success',
+                        data: data,
+                        message: 'Retrieved ALL donations for gift' + giftId
+                    });
+            })
+            .catch(function (err) {
+                return next(err);
+            });
+    } else {
+        db.any('SELECT * FROM donations')
+            .then(function (data) {
+                res.status(200)
+                    .json({
+                        status: 'success',
+                        data: data,
+                        message: 'Retrieved ALL donations'
+                    });
+            })
+            .catch(function (err) {
+                return next(err);
+            });
+    }
 }
 
 function getSingleDonation(req, res, next) {
@@ -79,7 +96,7 @@ function removeDonation(req, res, next) {
 }
 
 module.exports = {
-    getAllDonations: getAllDonations,
+    getDonations: getDonations,
     getSingleDonation: getSingleDonation,
     createDonation: createDonation,
 	removeDonation: removeDonation
