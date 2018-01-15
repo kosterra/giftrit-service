@@ -75,12 +75,12 @@ function createUser(req, res, next) {
         'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}) RETURNING id',
         req.body)
         .then(function () {
-            const createdUser = getSingleUser({params: {id: res.rows[0].id}}, {}, next)
+            const createdUser = getSingleUser({params: {id: res.rows[0].id}}, res, next)
             res.status(200)
                 .json({
                     status: 'success',
                     message: 'Inserted one user',
-            				data: createdUser,
+            				data: createdUser
                 });
         })
         .catch(function (err) {
