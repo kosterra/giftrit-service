@@ -96,6 +96,8 @@ router.get('/api/users/:id', db.getSingleUser);
  *     responses:
  *       200:
  *         description: Successfully created
+ *         schema:
+ *           $ref: '#/definitions/User'
  *       401:
  *         description: Unauthorized
  */
