@@ -26,9 +26,9 @@ function getAllUsers(req, res, next) {
 
 function getSingleUser(req, res, next) {
     var userId = parseInt(req.params.id);
-	
+
 	let data = [];
-	
+
     db.task(t => {
         return t.one('SELECT * FROM users WHERE id = $1', userId)
             .then(user => {
@@ -36,10 +36,10 @@ function getSingleUser(req, res, next) {
 				return t.any('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE userid=$1', user.id)
 					.then(gifts => {
 						data.gifts = gifts;
-						return t.any('SELECT * FROM donations WHERE userId = $1', user.id);							
+						return t.any('SELECT * FROM donations WHERE userId = $1', user.id);
 					});
             });
-	})	
+	})
 	.then(donations => {
 		data.donations = donations;
 		res.status(200)
@@ -52,9 +52,9 @@ function getSingleUser(req, res, next) {
 	.catch(error => {
 		return next(error);
 	});
-	
-	
-	
+
+
+
     /*db.one('SELECT * FROM users WHERE id = $1', userId)
         .then(function (data) {
             res.status(200)
@@ -72,13 +72,15 @@ function getSingleUser(req, res, next) {
 function createUser(req, res, next) {
     req.body.statusId = parseInt(req.body.karma);
     db.none('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description)' +
-        'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description})',
+        'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}) RETURNING id',
         req.body)
         .then(function () {
+            const createdUser = getSingleUser({params: {id: res.rows[0].id}}, {}, next)
             res.status(200)
                 .json({
                     status: 'success',
-                    message: 'Inserted one user'
+                    message: 'Inserted one user',
+            				data: createdUser,
                 });
         })
         .catch(function (err) {

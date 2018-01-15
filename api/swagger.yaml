@@ -371,6 +371,8 @@ paths:
       responses:
         201:
           description: "user created"
+          schema:
+            $ref: "#/definitions/User"
         400:
           description: "invalid input, object invalid"
         409:
