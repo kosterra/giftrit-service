@@ -71,7 +71,7 @@ function getSingleUser(req, res, next) {
 
 function createUser(req, res, next) {
     req.body.statusId = parseInt(req.body.karma);
-    db.none('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description)' +
+    db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description)' +
         'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}) RETURNING id',
         req.body)
         .then(function () {
