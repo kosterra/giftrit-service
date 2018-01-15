@@ -71,16 +71,21 @@ function getSingleUser(req, res, next) {
 
 function createUser(req, res, next) {
     req.body.statusId = parseInt(req.body.karma);
-    db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description)' +
+
+    db.task(t => {
+      return db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description)' +
         'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}) RETURNING id',
         req.body)
-        .then(function () {
-            const createdUser = getSingleUser({params: {id: res.rows[0].id}}, res, next)
+        .then(data => {
+            return db.one('SELECT * FROM users WHERE id = $1', data.id)
+        });
+      })
+      .then(createdUser => {
             res.status(200)
                 .json({
                     status: 'success',
-                    message: 'Inserted one user',
-            				data: createdUser
+            				data: createdUser,
+                    message: 'Inserted one user'
                 });
         })
         .catch(function (err) {
