@@ -10,12 +10,24 @@ const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432'
 const db = pgp(connectionString);
 
 function getAllGifts(req, res, next) {
+    let giftList = []
+
     db.any('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id')
-        .then(function (data) {
+        .then(data => {
+            let gifts = data;
+
+            gifts.map(gift => {
+                db.one('SELECT * FROM users WHERE id = $1', gift.userid)
+                    .then(user => {
+                        gift.user = user;
+                    });
+            });
+
+            giftList = gifts;
             res.status(200)
                 .json({
                     status: 'success',
-                    data: data,
+                    data: giftList,
                     message: 'Retrieved ALL gifts'
                 });
         })
