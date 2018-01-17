@@ -719,6 +719,7 @@ definitions:
     - "phone"
     - "status"
     - "username"
+    - "authid"
     properties:
       id:
         type: "integer"
@@ -748,6 +749,9 @@ definitions:
         type: "integer"
         format: "int32"
         description: "User Status"
+      authid:
+        type: "string"
+        example: "github|6666"
     example:
       karma: 180
       firstname: "Ralph"
@@ -758,6 +762,7 @@ definitions:
       email: "email"
       lastname: "Koster"
       username: "username"
+      authid: "github|6666"
       status: 0
 parameters:
   sessionCookie:
