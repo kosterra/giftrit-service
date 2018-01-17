@@ -24,6 +24,36 @@ function getAllUsers(req, res, next) {
         });
 }
 
+function getsingleUserByAuthId(req, res, next) {
+  var authId = req.params.authId;
+
+  let data = [];
+
+    db.task(t => {
+        return t.one('SELECT * FROM users WHERE authId = $1', authId)
+            .then(user => {
+        data = user;
+        return t.any('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE userid=$1', user.id)
+          .then(gifts => {
+            data.gifts = gifts;
+            return t.any('SELECT * FROM donations WHERE userId = $1', user.id);
+          });
+            });
+  })
+  .then(donations => {
+    data.donations = donations;
+    res.status(200)
+      .json({
+        status: 'success',
+        data: data,
+        message: 'Retrieved ONE user'
+      });
+  })
+  .catch(error => {
+    return next(error);
+  });
+}
+
 function getSingleUser(req, res, next) {
     var userId = parseInt(req.params.id);
 
@@ -73,8 +103,8 @@ function createUser(req, res, next) {
     req.body.statusId = parseInt(req.body.karma);
 
     db.task(t => {
-      return db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description, authid)' +
-        'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}, ${authid}) RETURNING id',
+      return db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description, authId)' +
+        'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}, ${authId}) RETURNING id',
         req.body)
         .then(data => {
             return db.one('SELECT * FROM users WHERE id = $1', data.id)

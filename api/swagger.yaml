@@ -403,6 +403,30 @@ paths:
         400:
           description: "bad input parameter"
       x-swagger-router-controller: "Users"
+    get:
+      tags:
+      - "users"
+      summary: "get a user by authId"
+      description: "By passing in the appropriate options, you get a user\n"
+      operationId: "getUserByAuthId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "authId"
+        in: "path"
+        description: "Authentication ID of user to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "user matching authId"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        400:
+          description: "bad input parameter"
+      x-swagger-router-controller: "Users"
     put:
       tags:
       - "users"
@@ -719,7 +743,7 @@ definitions:
     - "phone"
     - "status"
     - "username"
-    - "authid"
+    - "authId"
     properties:
       id:
         type: "integer"
@@ -749,7 +773,7 @@ definitions:
         type: "integer"
         format: "int32"
         description: "User Status"
-      authid:
+      authId:
         type: "string"
         example: "github|6666"
     example:
@@ -762,7 +786,7 @@ definitions:
       email: "email"
       lastname: "Koster"
       username: "username"
-      authid: "github|6666"
+      authId: "github|6666"
       status: 0
 parameters:
   sessionCookie:
