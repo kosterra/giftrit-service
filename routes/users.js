@@ -76,29 +76,6 @@ router.get('/api/users/:id', db.getSingleUser);
 
 /**
  * @swagger
- * /api/users/{authId}:
- *   get:
- *     tags:
- *       - User
- *     description: Returns a single user
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: authId
- *         description: User's auth0 authentication id
- *         in: path
- *         required: true
- *         type: string
- *     responses:
- *       200:
- *         description: A single user
- *         schema:
- *           $ref: '#/definitions/User'
- */
-router.get('/api/users/:id', db.getsingleUserByAuthId);
-
-/**
- * @swagger
  * /api/users:
  *   post:
  *     tags:
