@@ -10,25 +10,19 @@ const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432'
 const db = pgp(connectionString);
 
 function getAllUsers(req, res, next) {
-
-  let where = "";
-  let condValue = "";
   if(req.query.authId) {
-    sql = function() { return db.any('SELECT * FROM users WHERE authId = $1', req.query.authId) };
+    sql = function() { return db.one('SELECT * FROM users WHERE authId = $1', req.query.authId) };
   } else if(req.query.sessionId) {
-    sql = function() { return db.any('SELECT * FROM users WHERE sessionId = $1', req.query.sessionId) };
+    sql = function() { return db.one('SELECT * FROM users WHERE sessionId = $1', req.query.sessionId) };
   } else {
     sql = function() { return db.any('SELECT * FROM users ') };
   }
 
   sql()
-      .then(function (data) {
+      .then(function(data) {
+
           res.status(200)
-              .json({
-                  status: 'success',
-                  data: data,
-                  message: 'Retrieved ALL users'
-              });
+              .json(data);
       })
       .catch(function (err) {
           return next(err);
