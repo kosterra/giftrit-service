@@ -91,7 +91,7 @@ router.get('/api/gifts/:id', db.getSingleGift);
  *         schema:
  *           $ref: '#/definitions/Gift'
  */
-router.get('/api/gifts/:id', db.getUserGifts);
+router.get('/api/gifts/user/:id', db.getUserGifts);
 
 /**
  * @swagger
