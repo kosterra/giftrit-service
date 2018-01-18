@@ -54,6 +54,23 @@ function getSingleGift(req, res, next) {
 	});
 }
 
+function getUserGifts(req, res, next) {
+    let userId = parseInt(req.params.id);
+
+    db.any('SELECT gifts.*, users.username, donatedamount FROM gifts LEFT JOIN users ON gifts.userid = users.id LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE gifts.userid=$1', userId)
+        .then(function (data) {
+            res.status(200)
+                .json({
+                    status: 'success',
+                    data: data,
+                    message: 'Retrieved ALL gifts from user'
+                });
+        })
+        .catch(function (err) {
+            return next(err);
+        });
+}
+
 function createGift(req, res, next) {
     req.body.amount = parseFloat(req.body.amount);
     req.body.created = new Date(req.body.created);
@@ -111,6 +128,7 @@ function removeGift(req, res, next) {
 module.exports = {
     getAllGifts: getAllGifts,
     getSingleGift: getSingleGift,
+    getUserGifts: getUserGifts,
     createGift: createGift,
     updateGift: updateGift,
     removeGift: removeGift
