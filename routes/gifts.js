@@ -72,6 +72,29 @@ router.get('/api/gifts/:id', db.getSingleGift);
 
 /**
  * @swagger
+ * /api/gifts/user/{id}:
+ *   get:
+ *     tags:
+ *       - Gift
+ *     description: Returns a single gift
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: User's id
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: A list of gifts the user is owner
+ *         schema:
+ *           $ref: '#/definitions/Gift'
+ */
+router.get('/api/gifts/:id', db.getUserGifts);
+
+/**
+ * @swagger
  * /api/gifts:
  *   post:
  *     tags:

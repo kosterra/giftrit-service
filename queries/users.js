@@ -25,7 +25,7 @@ function getAllUsers(req, res, next) {
 }
 
 function getsingleUserByAuthId(req, res, next) {
-  var authId = req.params.authId;
+  const authId = req.params.authId;
 
   let data = [];
 
@@ -55,7 +55,7 @@ function getsingleUserByAuthId(req, res, next) {
 }
 
 function getSingleUser(req, res, next) {
-    var userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id);
 
 	let data = [];
 
@@ -139,7 +139,7 @@ function updateUser(req, res, next) {
 }
 
 function removeUser(req, res, next) {
-    var userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id);
     db.result('DELETE FROM users WHERE id = $1', userId)
         .then(function (result) {
             /* jshint ignore:start */
