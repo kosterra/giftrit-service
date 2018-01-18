@@ -45,6 +45,17 @@ const jwt = require('../helpers/jwt');
  *     description: Returns all users
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: authId
+ *         description: Users authentication id
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: sessionId
+ *         description: Users authentication session id
+ *         in: query
+ *         required: false
+ *         type: string
  *     responses:
  *       200:
  *         description: An array of users
@@ -122,16 +133,6 @@ router.post('/api/users', jwt.checkJwt, db.createUser);
  *         in: path
  *         required: true
  *         type: integer
- *       - name: authId
- *         description: Users authentication id
- *         in: query
- *         required: false
- *         type: string
- *       - name: sessionId
- *         description: Users authentication session id
- *         in: query
- *         required: false
- *         type: string
  *       - name: user
  *         description: User object
  *         in: body
