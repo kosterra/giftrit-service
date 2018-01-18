@@ -341,6 +341,16 @@ paths:
         description: "The name that needs to be fetched. Use user1 for testing. "
         required: false
         type: "string"
+      - name: "authId"
+        in: "query"
+        description: "AuthenticationID of the User"
+        required: false
+        type: "string"
+      - name: "sessionId"
+        in: "query"
+        description: "SessionID of the Users authentication"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -396,30 +406,6 @@ paths:
       responses:
         200:
           description: "user matching userId"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/User"
-        400:
-          description: "bad input parameter"
-      x-swagger-router-controller: "Users"
-    get:
-      tags:
-      - "users"
-      summary: "get a user by authId"
-      description: "By passing in the appropriate options, you get a user\n"
-      operationId: "getUserByAuthId"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "authId"
-        in: "path"
-        description: "Authentication ID of user to return"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "user matching authId"
           schema:
             type: "array"
             items:

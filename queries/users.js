@@ -11,36 +11,17 @@ const db = pgp(connectionString);
 
 function getAllUsers(req, res, next) {
 
+  let where = "";
+  let condValue = "";
   if(req.query.authId.length) {
-    var authId = req.query.authId;
-    let data = [];
-    db.task(t => {
-      return t.one('SELECT * FROM users WHERE authId = $1', authId)
-      .then(user => {
-        data = user;
-        return t.any('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE userid=$1', user.id)
-        .then(gifts => {
-          data.gifts = gifts;
-          return t.any('SELECT * FROM donations WHERE userId = $1', user.id);
-        });
-      });
-    })
-    .then(donations => {
-      data.donations = donations;
-      res.status(200)
-        .json({
-          status: 'success',
-          data: data,
-          message: 'Retrieved ONE user'
-        });
-    })
-    .catch(error => {
-      return next(error);
-    });
-    return;
+    where = "authId = $1";
+    condValue = req.query.authId;
+  } elseif(req.queryy.sessionId.length) {
+    where = "sessionId = $1";
+    condValue = req.query.sessionId;
   }
 
-  db.any('SELECT * FROM users')
+  db.any('SELECT * FROM users '+where, condValue)
       .then(function (data) {
           res.status(200)
               .json({

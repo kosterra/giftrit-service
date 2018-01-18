@@ -32,6 +32,8 @@ const jwt = require('../helpers/jwt');
  *         type: string
  *       authId:
  *         type: string
+ *       sessionId:
+ *         type: string
  */
 
 /**
@@ -120,6 +122,16 @@ router.post('/api/users', jwt.checkJwt, db.createUser);
  *         in: path
  *         required: true
  *         type: integer
+ *       - name: authId
+ *         description: Users authentication id
+ *         in: query
+ *         required: false
+ *         type: string
+ *       - name: sessionId
+ *         description: Users authentication session id
+ *         in: query
+ *         required: false
+ *         type: string
  *       - name: user
  *         description: User object
  *         in: body
