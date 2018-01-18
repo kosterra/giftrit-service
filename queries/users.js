@@ -11,36 +11,17 @@ const db = pgp(connectionString);
 
 function getAllUsers(req, res, next) {
 
-  if(req.query.authId.length) {
-    var authId = req.query.authId;
-    let data = [];
-    db.task(t => {
-      return t.one('SELECT * FROM users WHERE authId = $1', authId)
-      .then(user => {
-        data = user;
-        return t.any('SELECT * FROM gifts LEFT JOIN (SELECT sum(temp.amount) AS donatedAmount, temp.giftId FROM (SELECT coalesce(amount,0) AS amount, giftID FROM Donations WHERE NOT (Donations.amount IS NULL)) AS temp GROUP BY temp.giftId) GiftsDonations ON GiftsDonations.giftId = gifts.id WHERE userid=$1', user.id)
-        .then(gifts => {
-          data.gifts = gifts;
-          return t.any('SELECT * FROM donations WHERE userId = $1', user.id);
-        });
-      });
-    })
-    .then(donations => {
-      data.donations = donations;
-      res.status(200)
-        .json({
-          status: 'success',
-          data: data,
-          message: 'Retrieved ONE user'
-        });
-    })
-    .catch(error => {
-      return next(error);
-    });
-    return;
+  let where = "";
+  let condValue = "";
+  if(req.query.authId) {
+    sql = function() { return db.any('SELECT * FROM users WHERE authId = $1', req.query.authId) };
+  } else if(req.query.sessionId) {
+    sql = function() { return db.any('SELECT * FROM users WHERE sessionId = $1', req.query.sessionId) };
+  } else {
+    sql = function() { return db.any('SELECT * FROM users ') };
   }
 
-  db.any('SELECT * FROM users')
+  sql()
       .then(function (data) {
           res.status(200)
               .json({
@@ -133,8 +114,8 @@ function createUser(req, res, next) {
     req.body.statusId = parseInt(req.body.karma);
 
     db.task(t => {
-      return db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description, authId)' +
-        'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}, ${authId}) RETURNING id',
+      return db.one('INSERT INTO users(firstname, lastname, phone, email, username, statusId, karma, description, authId, sessionId)' +
+        'VALUES(${firstname}, ${lastname}, ${phone}, ${email}, ${username}, 1, 0, ${description}, ${authId}, ${sessionId}) RETURNING id',
         req.body)
         .then(data => {
             return db.one('SELECT * FROM users WHERE id = $1', data.id)
@@ -154,8 +135,8 @@ function createUser(req, res, next) {
 }
 
 function updateUser(req, res, next) {
-    db.none('UPDATE users SET firstname=$1, lastname=$2, username=$3, phone=$4, email=$5, karma=$6, description=$7, imageurl=$8 WHERE id=$9',
-        [req.body.firstname, req.body.lastname, req.body.username, req.body.phone, req.body.email, req.body.karma, req.body.description, req.body.imageUrl, req.params.id])
+    db.none('UPDATE users SET firstname=$1, lastname=$2, username=$3, phone=$4, email=$5, karma=$6, description=$7, imageurl=$8, sessionId=$9 WHERE id=$10',
+        [req.body.firstname, req.body.lastname, req.body.username, req.body.phone, req.body.email, req.body.karma, req.body.description, req.body.imageUrl, req.body.sessionId, req.params.id])
         .then(function () {
             res.status(200)
                 .json({

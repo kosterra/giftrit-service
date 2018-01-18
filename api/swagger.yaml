@@ -730,6 +730,7 @@ definitions:
     - "status"
     - "username"
     - "authId"
+    - "sessionId"
     properties:
       id:
         type: "integer"
@@ -759,6 +760,9 @@ definitions:
         type: "integer"
         format: "int32"
         description: "User Status"
+      authId:
+        type: "string"
+        example: "2134awf12341234sdf"
       authId:
         type: "string"
         example: "github|6666"
